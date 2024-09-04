@@ -1,7 +1,11 @@
+using System;
+
 namespace Task2
 {
-    public class Player
+    public class Player : IDisposable
     {
+        public event Action Defeat;
+
         private Health _health;
         private Level _level;
 
@@ -9,11 +13,21 @@ namespace Task2
         {
             _health = health;
             _level = level;
-        }
-    
-        public void Damage(int damage) => _health.Damage(damage);
 
-        public void Heal(int heal) => _health.Heal(heal);
+            Subscribe();
+        }
+
+        public void Dispose() => Unsubscribe();
+
+        private void Subscribe() => _health.HealthOver += OnHealthOver;
+
+        private void Unsubscribe() => _health.HealthOver -= OnHealthOver;
+
+        private void OnHealthOver() => Defeat?.Invoke();
+
+        public void Damage(float damage) => _health.Damage(damage);
+
+        public void Heal(float heal) => _health.Heal(heal);
 
         public void RaiseLevel() => _level.RaiseLevel();
     }

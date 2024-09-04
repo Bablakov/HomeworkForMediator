@@ -6,16 +6,16 @@ namespace Task2
     public class Health
     {
         public event Action HealthOver;
-        public event Action<int> ChangedHealth;
+        public event Action<float> ChangedHealth;
 
-        private int _health;
+        private float _health;
 
-        public Health(int health)
+        public Health(float health)
         {
             _health = health;
         }
 
-        public void Damage(int damage)
+        public void Damage(float damage)
         {
             if (damage < 0)
                 return;
@@ -33,7 +33,7 @@ namespace Task2
             }
         }
 
-        public void Heal(int heal)
+        public void Heal(float heal)
         {
             if (heal < 0)
                 return;
