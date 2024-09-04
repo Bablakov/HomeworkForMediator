@@ -1,6 +1,7 @@
 using System;
+using Zenject;
 
-namespace Task2
+namespace Task2.PlayersComponent
 {
     public class Player : IDisposable
     {
@@ -17,18 +18,24 @@ namespace Task2
             Subscribe();
         }
 
+        public void Reset()
+        {
+            _health.Reset();
+            _level.Reset();
+        }
+
         public void Dispose() => Unsubscribe();
-
-        private void Subscribe() => _health.HealthOver += OnHealthOver;
-
-        private void Unsubscribe() => _health.HealthOver -= OnHealthOver;
-
-        private void OnHealthOver() => Defeat?.Invoke();
 
         public void Damage(float damage) => _health.Damage(damage);
 
         public void Heal(float heal) => _health.Heal(heal);
 
         public void RaiseLevel() => _level.RaiseLevel();
+
+        private void Subscribe() => _health.HealthOver += OnHealthOver;
+
+        private void Unsubscribe() => _health.HealthOver -= OnHealthOver;
+
+        private void OnHealthOver() => Defeat?.Invoke();
     }
 }

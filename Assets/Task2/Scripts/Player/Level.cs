@@ -1,24 +1,30 @@
 ﻿using System;
 using UnityEngine;
+using Zenject;
 
-namespace Task2
+namespace Task2.PlayersComponent
 {
     public class Level
     {
         public event Action<int> ChangedLevel;
 
-        private int _level;
+        private const int DefaultLevel = 1;
 
         public Level()
-        {
-            _level = 0;
-        }
+            => CurrentLevel = DefaultLevel;
+
+        public int CurrentLevel { get; private set; }
         
         public void RaiseLevel()
         {
-            Debug.Log($"RaiseLevel {_level}");
-            _level++;
-            ChangedLevel?.Invoke(_level);
+            CurrentLevel++;
+            ChangedLevel?.Invoke(CurrentLevel);
+        }
+
+        public void Reset()
+        {
+            CurrentLevel = DefaultLevel;
+            ChangedLevel?.Invoke(CurrentLevel);
         }
     }
 }

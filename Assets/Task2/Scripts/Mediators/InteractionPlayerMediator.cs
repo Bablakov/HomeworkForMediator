@@ -1,8 +1,11 @@
 ﻿using UnityEngine;
+using Task2.UI.Panels;
+using Task2.PlayersComponent;
+using System;
 
-namespace Task2
+namespace Task2.Mediators
 {
-    public class InteractionPlayerMediator
+    public class InteractionPlayerMediator : IDisposable
     {
         private Player _player;
         private InteractionPanel _panel;
@@ -14,10 +17,7 @@ namespace Task2
             Subscribe();
         }
 
-        public void Dispose()
-        {
-            Unsubscribe();
-        }
+        public void Dispose() => Unsubscribe();
 
         private void Subscribe()
         {
@@ -34,21 +34,12 @@ namespace Task2
         }
 
         private void OnHealed(float heal)
-        {
-            Debug.Log($"OnHealed {heal}");
-            _player.Heal(heal);
-        }
+            => _player.Heal(heal);
 
         private void OnDamaged(float damage) 
-        {
-            Debug.Log($"OnDamaged {damage}");
-            _player.Damage(damage);
-        }
+            => _player.Damage(damage);
 
         private void OnRaisedLevel()
-        {
-            Debug.Log("OnRaisedLevel");
-            _player.RaiseLevel();
-        } 
+            => _player.RaiseLevel();
     }
 }

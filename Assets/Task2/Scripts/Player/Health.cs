@@ -1,36 +1,36 @@
 ﻿using System;
+using Task2.Config;
 using UnityEngine;
+using Zenject;
 
-namespace Task2
+namespace Task2.PlayersComponent
 {
     public class Health
     {
         public event Action HealthOver;
         public event Action<float> ChangedHealth;
 
-        private float _health;
+        private float _startHealth;
 
-        public Health(float health)
-        {
-            _health = health;
-        }
+        public Health(PlayerConfig playerConfig) =>
+            CurrentHealth = _startHealth = playerConfig.Health;
 
+        public float CurrentHealth { get; private set; }
+        
         public void Damage(float damage)
         {
             if (damage < 0)
                 return;
 
-            _health -= damage;
-            Debug.Log($"Damage {damage}");
+            CurrentHealth -= damage;
 
-            ChangedHealth?.Invoke(_health);
-
-            if (_health <= 0)
+            if (CurrentHealth <= 0)
             {
-                _health = 0;
-                Debug.Log("HealthOver");
+                CurrentHealth = 0;
                 HealthOver?.Invoke();
             }
+
+            ChangedHealth?.Invoke(CurrentHealth);
         }
 
         public void Heal(float heal)
@@ -38,9 +38,14 @@ namespace Task2
             if (heal < 0)
                 return;
 
-            _health += heal;
-            Debug.Log($"Heal {heal}");
-            ChangedHealth?.Invoke(_health);
+            CurrentHealth += heal;
+            ChangedHealth?.Invoke(CurrentHealth);
+        }
+
+        public void Reset()
+        {
+            CurrentHealth = _startHealth;
+            ChangedHealth?.Invoke(CurrentHealth);
         }
     }
 }

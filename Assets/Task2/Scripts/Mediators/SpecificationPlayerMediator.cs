@@ -1,8 +1,11 @@
 ﻿using UnityEngine;
+using Task2.UI.Panels;
+using Task2.PlayersComponent;
+using System;
 
-namespace Task2
+namespace Task2.Mediators
 {
-    public class SpecificationPlayerMediator
+    public class SpecificationPlayerMediator : IDisposable
     {
         private SpecificationPanel _panelSpecification;
         private Health _health;
@@ -13,13 +16,14 @@ namespace Task2
             _panelSpecification = panelSpecification;
             _health = health;
             _level = level;
+
+            OnChangedHealth(_health.CurrentHealth);
+            OnChangedLevel(_level.CurrentLevel);
+
             Subscribe();
         }
 
-        public void Dispose()
-        {
-            Unsubscribe();
-        }
+        public void Dispose() => Unsubscribe();
 
         private void Subscribe()
         {
@@ -33,16 +37,10 @@ namespace Task2
             _level.ChangedLevel -= OnChangedLevel;
         }
 
-        private void OnChangedHealth(float health)
-        {
-            Debug.Log("OnChangedHealth");
-            _panelSpecification.SetHealth(health);
-        }
+        private void OnChangedHealth(float health) 
+            => _panelSpecification.SetHealth(health);
 
         private void OnChangedLevel(int level)
-        {
-            Debug.Log("OnChangedLevel");
-            _panelSpecification.SetLevel(level);
-        }
+            => _panelSpecification.SetLevel(level);
     }
 }

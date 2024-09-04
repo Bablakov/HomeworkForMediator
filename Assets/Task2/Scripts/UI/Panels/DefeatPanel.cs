@@ -1,10 +1,11 @@
 ﻿using System;
+using Zenject;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace Task2
+namespace Task2.UI.Panels
 {
-    public class DefeatPanel : MonoBehaviour
+    public class DefeatPanel : BasePanel
     {
         public event Action Restarted;
 
@@ -14,19 +15,11 @@ namespace Task2
 
         private void OnDisable() => Unsubscribe();
 
-        public void Show() => gameObject.SetActive(true);
+        private void Subscribe() 
+            => _buttonRestart.onClick.AddListener(OnRestartClick);
 
-        public void Hide() => gameObject.SetActive(false);
-
-        private void Subscribe()
-        {
-            _buttonRestart.onClick.AddListener(OnRestartClick);
-        }
-
-        private void Unsubscribe()
-        {
-            _buttonRestart.onClick.RemoveListener(OnRestartClick);
-        }
+        private void Unsubscribe() 
+            => _buttonRestart.onClick.RemoveListener(OnRestartClick);
 
         private void OnRestartClick()
             => Restarted?.Invoke();
