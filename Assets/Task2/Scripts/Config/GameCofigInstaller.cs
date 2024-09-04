@@ -8,6 +8,7 @@ namespace Assets.Task2.Scripts.Config
     public class GameConfigInstaller : ScriptableObjectInstaller<GameConfigInstaller>
     {
         [SerializeField] private PlayerConfig _playerConfig;
+
         public override void InstallBindings()
         {
             Container.Bind<PlayerConfig>().FromInstance(_playerConfig);
